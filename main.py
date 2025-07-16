@@ -23,20 +23,70 @@ def on_press(key):
     if key == keyboard.Key.esc:
         return ESC
 
+# /I should probably just call this the main loop
 
 def simlaunch():
     done = false   
     wait = false
-    l = launcher()
+    u = ut.Utility
+    
     
     
     while not done:
         ## this starts the sim loop. lets just make it 5hz for laughs. 
         ## check to end the sim by keyboard
-        if 
-        if time2act: 
-           
-           ## 
+        ### Code that will read message bytes from a port
+
+        now = time.perf_counter()
+        elapsed_time = now - t0
+        target_time = time_counter + CYCLETIME
+        if elapsed_time < target_time:
+            time.sleep(target_time - elapsed_time)
+
+        # In the full program we write to a csv but in this simple program we will just print it
+        milliseconds_since_epoch = datetime.datetime.now(timezone.utc)
+        u.printf("Milliseconds since epoch: %f\n",milliseconds_since_epoch)
+
+        time_counter += CYCLETIME
+        ### Code that will read message bytes from a port
+
+        now = time.perf_counter()
+        elapsed_time = now - t0
+        target_time = time_counter + CYCLETIME
+        if elapsed_time < target_time:
+            time.sleep(target_time - elapsed_time)
+
+        # In the full program we write to a csv but in this simple program we will just print it
+        milliseconds_since_epoch = datetime.datetime.now(timezone.utc)
+        print(milliseconds_since_epoch)
+
+        time_counter += CYCLETIME
+        ### Code that will read message bytes from a port
+
+        now = time.perf_counter()
+        elapsed_time = now - t0
+        target_time = time_counter + CYCLETIME
+        if elapsed_time < target_time:
+            time.sleep(target_time - elapsed_time)
+
+        # In the full program we write to a csv but in this simple program we will just print it
+        milliseconds_since_epoch = datetime.datetime.now(timezone.utc)
+        print(milliseconds_since_epoch)
+
+        time_counter += CYCLETIME
+        ### Code that will read message bytes from a port
+
+        now = time.perf_counter()
+        elapsed_time = now - t0
+        target_time = time_counter + CYCLETIME
+        if elapsed_time < target_time:
+            time.sleep(target_time - elapsed_time)
+
+        # In the full program we write to a csv but in this simple program we will just print it
+        milliseconds_since_epoch = datetime.datetime.now(timezone.utc)
+        print(milliseconds_since_epoch)
+
+        time_counter += CYCLETIME
                 
 def simreport():
     pass

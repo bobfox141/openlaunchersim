@@ -7,7 +7,12 @@ class Missile:
     INITPOS = [0,0,0]
     
         
-    def __init__(self, id, arm ):
+    def __init__(self):
         fsm = off
-        missile_id = id
+        missile_id = 1
         armed = arm 
+        target = [0,0,0]  # target at origin
+        
+        
+    def target(self):
+        
