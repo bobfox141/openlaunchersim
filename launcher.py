@@ -39,18 +39,14 @@ class Launcher():
         self.directional = true
         self.target = [0,0,0]   # target is x,y,z downrange in meters
         self.waypoint = [0,0,0] # a list of waypoints. first interation will not use this.
-        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        self.port = 54000
-        self.s.bind(('',self.port))
-        self.s.listen(5)   # max 5 connections set up for the listen.
+        
         self.done = False
         self.armed = False
         self.targetset = False
         self.buffer = ""
         
     def recv(self):
-        self.buffer = self.s.recv(128)  # receive data up to 128 bytes and put it in the buffer.
+       
         return self.buffer
         
         
@@ -63,12 +59,11 @@ class Launcher():
     
     # this is the main loop for the launcher
     def go(self):
-        
         while not self.done:
-            buf = self.recv()  # check the socket for a command
-            if length(buf) > 0:
-                command = buf.decode()
             print("Current status: Launcher is ", end = "")
+            if length(self.buf) > 0:
+                command = self.buf[0]   # get the first char of buffer
+                
             if self.fsm == self.OFF:
                 print("OFF.")
                 if command == self.STANDBY:
@@ -78,9 +73,17 @@ class Launcher():
                 print("STANDBY.")
                 if command == self.ARMED:
                     self.armlauncher()
-                 
+            elif self.fsm == self.ARM:
+                
+            elif self.fsm == self.LAUNCH:
+            sleep(1000.0/5.0)        
                     
+    def receiver(self):
 
+        while not self.done:  
+            self.buf = self.s.recv(1)  # receive data up to 128 bytes and put it in the buffer.  
+            sleep(1000.0/5.0)    
+            
     
     # initialize currently turns the launcher from off to standby
     # checks the rounds available and then waits for a target
@@ -112,4 +115,5 @@ class Launcher():
 
 if __name__ == "__main__":
     l = Launcher()
+    
     l.go()
