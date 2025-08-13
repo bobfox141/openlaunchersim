@@ -40,7 +40,7 @@ class SimpleServer():
                 print(f"Quit has been ordered. Shutting down.")
                 exit()
             if r == "D":
-                w = self.recv()
+                w = self.recv()                
                 self.weapon = w # get the next byte
                 
                 

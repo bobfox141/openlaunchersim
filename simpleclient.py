@@ -2,7 +2,7 @@ import socket
 
 class SimpleClient():
     # attributes
-    commands = [ "O","S", "C", "A", "L" ]   # off, standby, active, arm, launch 
+    commands = [ "O","S", "C", "A", "L", "W", "D" ]   # off, standby, active, arm, launch 
     HOST = '127.0.0.1'  # The server's hostname or IP address
     PORT = 65432        # The port used by the server
     count = 0
