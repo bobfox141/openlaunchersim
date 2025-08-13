@@ -11,8 +11,11 @@ import socket
 class Launcher():
     OFF = 0
     STANDBY = 1
-    ARMED = 2
-    LAUNCH = 3 
+    ACTIVE = 2 
+    ARMED = 3
+    LAUNCH = 4 
+    TARGET = 5
+    WEAPSEL = 6
     
     QUIT = 0
     LSTANDBY = 1
@@ -34,7 +37,7 @@ class Launcher():
         self.launcher_type = fixed
         self.pods_loaded = 1 
         self.rounds = r
-        self.mtype = t
+        self.mtype = t  # tgus us the weapon type. 
         self.expended = 0
         self.directional = true
         self.target = [0,0,0]   # target is x,y,z downrange in meters
@@ -45,12 +48,7 @@ class Launcher():
         self.targetset = False
         self.buffer = ""
         
-    def recv(self):
-       
-        return self.buffer
-        
-        
-        
+
     def rounds(self):
         return self.rounds
     
@@ -110,10 +108,10 @@ class Launcher():
     def poweroff(self):
         self.fsm = self.OFF
         
-        
 
 
+# the main only gets used when you call the module by filename as in 
+# python launcher.py
 if __name__ == "__main__":
     l = Launcher()
-    
     l.go()

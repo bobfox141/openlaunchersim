@@ -10,20 +10,19 @@
 import threading
 import sys
 
-from launcher import Launcher
-from controller import Controller as ct
-
-
+import controller
 
 def main(argc, argv):
     
-    thread = Thread(target = ct.go, args(5,) # default loop value. probably can go much slower
-    thread.start()
-	l = Launcher(4,1)
-	l.go()
+    threadcontroller = threading.Thread(target = Controller.go)        # default loop value. probably can go much slower
+    threadcontoller.start()
+    threadlistener = Thread(target = Listener.go)
+    threadlistener.start()
+
+    
 
 
 if __name__ == "__main__":
-	argc = len(sys.argv)
-	argv = sys.argv
-	main(argc, argv)
+    argc = len(sys.argv)
+    argv = sys.argv
+    main(argc, argv)
