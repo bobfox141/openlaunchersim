@@ -10,7 +10,6 @@ import queue
 import socket
 
 
-
 class Controller:
     DEBUG = True
     LAUNCHFREQ = 5
@@ -45,11 +44,7 @@ class Controller:
             print(f"Received from server: {data.decode()}")
             s.close()
 
-
-    def close(self):
-        self.s.close()
-
-    # return the next command in the sequence for testing.
+        # return the next command in the sequence for testing.
     def gencommand(self):
         comid = self.commands.index(self.command) + 1
         if comid > 4:
@@ -92,7 +87,6 @@ class Controller:
 
     def main(self, hz):
         self.go(hz)
-
 
 
 if __name__ == "__main__":

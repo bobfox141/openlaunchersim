@@ -4,51 +4,67 @@ import time
 
 class Listener:
     HOST = '127.0.0.1'           # Standard loopback interface address (localhost)
-    PORT = 54000        # Port to listen on (non-privileged ports are > 1023)
+    PORT = 65432        # Port to listen on (non-privileged ports are > 1023)
     connected = False
     LAUNCHFREQ = 5
-    def go(self, hz):
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        s.bind((self.HOST, self.PORT))
-        s.setblocking(False) 
-        s.listen(5)
-        print("waiting for connection")
-        while not self.connected:
-            try:
-                conn, addr = s.accept()  # set to non blocking
-                conn.setblocking(False)
-                # guessing if we get here the connection was accepted. 
-                self.connected = True
-            except BlockingIOError as e:
-                if e.errno == errno.EAGAIN or e.errno == errno.EWOULDBLOCK:
-                    print(".", end = "")
-                    time.sleep(.2)
-                    pass
+    commands = [ "O","S", "C", "A", "L", "W", "D" ]   # off, standby, active, arm, launch
+    done = False
+    
+    def getListenerRef(self):
+        return self
+    
+    def recv(self):
+        command = ""
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.bind((self.HOST, self.PORT))
+            s.listen()
+            print(f"Server listening on {self.HOST}:{self.PORT}")
+            conn, addr = s.accept()
+            with conn:
+                print(f"Connected by {addr}")
+                while True:
+                    data = conn.recv(1024)
+                    if not data:
+                        break
+                    command = data.decode()
+                    print(f"Received from client: {command}")
+                    conn.sendall(b"Server received your message:" + data)
+            s.close()
+        return command
+        
+        
+    
+    def go(self):
+        
+        while not self.done:
+            r = self.recv()
+            if r in self.commands:
+                if r == "S":
+                    print(f"Transitioning launcher to standby.")
+                elif r == "Q":
+                    print(f"Quit has been ordered. Shutting down.")
+                    exit()
+                elif r == "D":
+                    w = self.recv()                
+                    self.weapon = w # get the next byte
+                elif r == "L":
+                    print("Launch command issued.")
+                elif r == "A":
+                    print("Arm command issued.")
+                elif r == "C":
+                    print("Transition to active.")
+                elif r == "O":
+                    print("Powering down to safe mode, minimal power required.")
                 else:
-                    print(f"Error accepting connection {e}")
-                    break
-            except Exception as e:
-                print(f"An unexpected error occurred: {e}")
-                break
-                
-        print("got connection from", addr)
-        while True:
-            try:
-                data = conn.recv(128)
-                if not data:
-                    break
-                print(f"Received: {data.decode()}")
-                conn.sendall(data) # Echo back the received data
-                sleep(1.0/hz)
-            finally:
-                s.close()
-
+                    print("Invalid command issued.")
+            else: 
+                print("Command ignored.") 
+            time.sleep(1/self.LAUNCHFREQ)       
 
 def main():
     print("Running controller.py in stand alone mode:")
     l = Listener()
-    l.go(l.LAUNCHFREQ)
+    l.go()
 
 
 if __name__ == "__main__":
