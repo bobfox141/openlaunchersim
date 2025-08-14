@@ -9,6 +9,7 @@ class Listener:
     LAUNCHFREQ = 5
     commands = [ "O","S", "C", "A", "L", "W", "D" ]   # off, standby, active, arm, launch
     done = False
+    command = ""
     
     def getListenerRef(self):
         return self
@@ -26,13 +27,17 @@ class Listener:
                     data = conn.recv(1024)
                     if not data:
                         break
-                    command = data.decode()
-                    print(f"Received from client: {command}")
-                    conn.sendall(b"Server received your message:" + data)
+                    else:
+                        self.command_recv = True
+                        self.command = data.decode()
+                        print(f"Received from client: {self.command}")
+                        conn.sendall(b"Server received your message:" + data)
             s.close()
         return command
         
-        
+    def getLastCommand():
+        self.command_recv = False
+        return    
     
     def go(self):
         

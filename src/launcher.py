@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 
+# checks the command bus for a command, checks internal state for problems, waits.
 # this is the launcher. valid launcher states are off, standby, armed, launching
 # a launcher does a couple of things. interfaces to the weapon, powers the systems before the
 # internal generator comes on line
 # and fires the charge that lights the fuel sources.
 # after that, it just returns to standby
+
 
 import socket
 
@@ -58,6 +60,7 @@ class Launcher():
     # this is the main loop for the launcher
     def go(self):
         while not self.done:
+            
             print("Current status: Launcher is ", end = "")
             if length(self.buf) > 0:
                 command = self.buf[0]   # get the first char of buffer
@@ -87,7 +90,11 @@ class Launcher():
     # checks the rounds available and then waits for a target
     def init(self):
         self.fsm = self.STANDBY
-        printf("Powering the launcher on.")
+        print("Powering the launcher to standby.")
+        if self.selfcheck():
+            print("Launcher: " + LID + "is available and accepting commands.")
+        else
+            print
         
     def armlauncher(self):
         self.fsm = self.ARMED
@@ -109,6 +116,8 @@ class Launcher():
         self.fsm = self.OFF
         
 
+    def getLauncherRef():
+        return self
 
 # the main only gets used when you call the module by filename as in 
 # python launcher.py
